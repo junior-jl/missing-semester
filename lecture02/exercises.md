@@ -18,7 +18,7 @@ A sample output would look like this:
 
 Answer:
 
-```
+```bash
 ls -altch --color
 ```
 
@@ -26,7 +26,7 @@ ls -altch --color
 
 Output:
 
-```
+```bash
 total 160K
 drwxr-xr-x 1 junior junior 4.0K Dec  2 19:01 missing-semester
 -rw-r--r-- 1 junior junior   21 Dec  2 18:42 last-modified.txt
@@ -68,7 +68,7 @@ drwxr-xr-x 1 root   root   4.0K Jun 19 21:23 ..
 
 Answer:
 
-```
+```bash
 #!/bin/usr/env bash
 marco () {
         cur=$(pwd)
