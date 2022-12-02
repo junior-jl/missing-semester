@@ -19,8 +19,10 @@ A sample output would look like this:
 Answer:
 
 ```
-ls -alch --color
+ls -altch --color
 ```
+
+(a) lists hidden files, (l) uses a long list format, (h) is the human readable option, (c) sorts the list by time (with -lt) and (--color) colorize the output.
 
 Output:
 
