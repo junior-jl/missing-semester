@@ -120,3 +120,20 @@ find . name '*.html' | xargs -d '\n' tar czf htmls.tar.gz
 ```
 
 `find . name '*.html'` finds all the html's files in the current directory. `xargs -d '\n'` will run the following command with the previous command output as arguments separated by the newline character and `tar czf htmls.tar.gz` creates a zipped archive.
+
+### 5. (Advanced) Write a command or script to recursively find the most recently modified file in a directory. More generally, can you list all files by recency?
+
+Answer:
+
+The first thought would be use something like `ls -t | head -1`, but this doesn't act recursively through the directory. So, to find the most recently modified file:
+
+```bash
+find . -type f -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2 | head -1
+```
+
+- `find . -type f -printf '%T@ %p\n'` gets all the regular files (`-type f`) in the directory and prints them with the file's last modification time in seconds (`%T@`), a white space, the name of the file (`%p`) and a newline character;
+- `sort -rn` sorts the 'list' reversely and numerically (the seconds);
+- `cut -d' ' -f2` gets only the second field of each line (separated by whitespaces);
+- `head -1` gets the first line
+
+To get all the files, just omit the `head -1`.
