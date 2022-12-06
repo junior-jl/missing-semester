@@ -151,3 +151,175 @@ BFG run is complete! When ready, run: git reflog expire --expire=now --all && gi
 The commit doesn't have the sensitive file anymore:
 
 ![image](https://user-images.githubusercontent.com/69206952/205954423-f83c9349-7493-4413-b072-cdac669cfae3.png)
+
+### 4. Clone some repository from GitHub, and modify one of its existing files. What happens when you do `git stash`? What do you see when running `git log --all --oneline`? Run `git stash pop` to undo what you did with `git stash`. In what scenario might this be useful?
+
+Answer: This is the content of the file `network_parameters.md` on my repo `studying_quantum_computing` (gathered using `cat network_parameters | clip.exe`:
+
+````
+# Nós
+
+- Boolean: end_node
+- Boolean: quantico
+- Boolean: memoria
+- id
+- taxa_minima
+- ruido_operacoes
+- decoerencia
+- geracao
+- destilaçao
+- lat (?)
+- long (?)
+
+```py
+class No(object):
+    def __init__(self, id = '', taxa_minima = 0 , ruido_operacoes = 0, decoerencia = 0, geracao = 1, lat = 0, long = 0, end_node = False,
+                 quantico = True, memoria = False):
+        self.id = id
+
+    def distanciaEntreNos(self, alvo):
+        # import geopy.distance
+        coords_1 = (self.lat, self.long)
+        coords_2 = (alvo.lat, alvo.long)
+
+        print(geopy.distance.geodesic(coords_1, coords_2).km)
+```
+
+# Canais
+
+- Boolean: quantico
+- id
+- comprimento
+- [unidade]
+- delay (ms)
+- ocupado
+- registro_swap
+
+## Netsquid
+
+- Modelo de delay (Q e C)
+- Modelo de ruído (Q e C)
+- Modelo de perdas (Q e C)
+```py
+class Canal(object):
+  def __init__(self, id, comprimento, quantico = True, unidade = 'km', ocupado = False, registro_swap = []):
+    self.id = id
+    self.comprimento = comprimento
+    self.delay = 3e8/self.comprimento
+```
+````
+
+Suppose I want to write `blabla` at the end of the file, but I do `echo blabla > network_parameters.md` instead of using `>>`, the file now has only 
+
+```
+blabla
+
+```
+
+Now executing,
+
+```bash
+git stash
+```
+
+```
+Saved working directory and index state WIP on main: a7b382f Add ok file and some sensitive information that shouldnt be commited
+```
+
+Again, using `cat network_parameters.md | clip.exe`:
+
+````
+# Nós
+
+- Boolean: end_node
+- Boolean: quantico
+- Boolean: memoria
+- id
+- taxa_minima
+- ruido_operacoes
+- decoerencia
+- geracao
+- destilaçao
+- lat (?)
+- long (?)
+
+```py
+class No(object):
+    def __init__(self, id = '', taxa_minima = 0 , ruido_operacoes = 0, decoerencia = 0, geracao = 1, lat = 0, long = 0, end_node = False,
+                 quantico = True, memoria = False):
+        self.id = id
+
+    def distanciaEntreNos(self, alvo):
+        # import geopy.distance
+        coords_1 = (self.lat, self.long)
+        coords_2 = (alvo.lat, alvo.long)
+
+        print(geopy.distance.geodesic(coords_1, coords_2).km)
+```
+
+# Canais
+
+- Boolean: quantico
+- id
+- comprimento
+- [unidade]
+- delay (ms)
+- ocupado
+- registro_swap
+
+## Netsquid
+
+- Modelo de delay (Q e C)
+- Modelo de ruído (Q e C)
+- Modelo de perdas (Q e C)
+```py
+class Canal(object):
+  def __init__(self, id, comprimento, quantico = True, unidade = 'km', ocupado = False, registro_swap = []):
+    self.id = id
+    self.comprimento = comprimento
+    self.delay = 3e8/self.comprimento
+```
+````
+
+```bash
+git log --all --oneline
+```
+![image](https://user-images.githubusercontent.com/69206952/205957726-b5bd01ee-c58f-4737-b415-8a7f8324faaa.png)
+
+```bash
+git stash pop
+```
+
+![image](https://user-images.githubusercontent.com/69206952/205957968-3dbd778f-d356-4c10-bf9a-d46252a3c8fa.png)
+
+File:
+
+```
+blabla
+
+```
+
+I think the example shows a scenario that this tool might be useful.
+
+### 5. Like many command line tools, Git provides a configuration file (or dotfile) called `~/.gitconfig`. Create an alias in `~/.gitconfig` so that when you run `git graph`, you get the output of `git log --all --graph --decorate --oneline`. Information about `git` aliases can be found here.
+
+Answer:
+
+![image](https://user-images.githubusercontent.com/69206952/205960233-856bf99d-c56e-4203-8ed7-521e72d0f698.png)
+
+![image](https://user-images.githubusercontent.com/69206952/205960323-2cc85cc4-9c50-4040-ac9d-03451049d2c3.png)
+
+### 6. You can define global ignore patterns in `~/.gitignore_global` after running `git config --global core.excludesfile ~/.gitignore_global`. Do this, and set up your global gitignore file to ignore OS-specific or editor-specific temporary files, like `.DS_Store`.
+
+Answer:
+
+Telling git to ignore `clip.exe`:
+
+```bash
+git config --global core.excludesfile ~/.gitignore_global
+echo clip.exe > ~/.gitignore_global
+```
+
+### 7. Fork the repository for the class website, find a typo or some other improvement you can make, and submit a pull request on GitHub.
+
+Answer: TODO!
