@@ -101,10 +101,10 @@ Answer:
 #!/usr/bin/env bash
 x=1
 ./testscript.sh > stdoutputtest.txt 2> stderror.txt
-while [ $? != 1 ]
+while [ $? -eq 0 ]
 do
         x=$(( x+1 ))
-        ./testscript.sh >> stdoutputtest.txt 2> stderror.txt
+        ./testscript.sh >> stdoutputtest.txt 2>> stderror.txt
 done
 echo "$x tries to fail"
 ```
