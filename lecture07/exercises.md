@@ -167,3 +167,51 @@ After uncommenting the lines:
 
 
 ![pycallgraph](https://user-images.githubusercontent.com/69206952/206306547-21d2f099-ef5b-44db-b790-054a91285693.png)
+
+
+### 7. A common issue is that a port you want to listen on is already taken by another process. Let’s learn how to discover that process pid. First execute `python -m http.server 4444` to start a minimal web server listening on port `4444`. On a separate terminal run `lsof | grep LISTEN` to print all listening processes and ports. Find that process pid and terminate it by running `kill <PID>`.
+
+Answer:
+
+```bash
+python3 -m http.server 4444
+```
+
+```
+Serving HTTP on 0.0.0.0 port 4444 (http://0.0.0.0:4444/) ...
+```
+
+The command `lsof | grep LISTEN` is not working. But since the focus is to kill the process by the PID, I executed
+
+```bash
+python -m http.server 4444 &
+```
+
+Because of the & symbol, it executes in the background. Now, executing `jobs -l`:
+
+![image](https://user-images.githubusercontent.com/69206952/206311573-c85b8d88-fe0a-4b27-97ba-75fd45630f56.png)
+
+```bash
+kill 19464
+```
+
+```
+[3]+ 19464 Terminated              python3 -m http.server 4444
+```
+
+### 8. Limiting processes resources can be another handy tool in your toolbox. Try running `stress -c 3` and visualize the CPU consumption with `htop`. Now, execute `taskset --cpu-list 0,2 stress -c 3` and visualize it. Is stress taking three CPUs? Why not? Read `man taskset`. Challenge: achieve the same using `cgroups`. Try limiting the memory consumption of `stress -m`.
+
+Answer:
+
+```bash
+stress -c 3
+```
+
+![image](https://user-images.githubusercontent.com/69206952/206312450-e350d339-13a4-4487-b595-bb0833d6256c.png)
+
+```bash
+taskset --cpu-list 0,2 stress -c 3
+```
+
+![image](https://user-images.githubusercontent.com/69206952/206312635-a07cda25-7b85-4458-8696-068496958172.png)
+
