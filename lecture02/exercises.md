@@ -99,14 +99,19 @@ Answer:
 
 ```bash
 #!/usr/bin/env bash
-x=1
-./testscript.sh > stdoutputtest.txt 2> stderror.txt
-while [ $? -eq 0 ]
+
+echo "********************" > outputscript.txt
+echo "********************" > errorscript.txt
+tries=0
+
+until [ $? -ne 0 ]
 do
-        x=$(( x+1 ))
-        ./testscript.sh >> stdoutputtest.txt 2>> stderror.txt
+	tries=$(( tries+1 ))
+	./testscript.sh >> outputscript.txt 2>> errorscript.txt
 done
-echo "$x tries to fail"
+cat outputscript.txt
+echo "$tries tries to fail"
+
 ```
 
 ### 4. As we covered in the lecture `find`’s `-exec` can be very powerful for performing operations over the files we are searching for. However, what if we want to do something with all the files, like creating a zip file? As you have seen so far commands will take input from both arguments and STDIN. When piping commands, we are connecting STDOUT to STDIN, but some commands like `tar` take inputs from arguments. To bridge this disconnect there’s the `xargs` command which will execute a command using STDIN as arguments. For example `ls | xargs rm` will delete the files in the current directory.
