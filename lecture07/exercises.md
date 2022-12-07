@@ -42,3 +42,90 @@ The links provided in the image are very helpful. To solve the issues:
 ### 4. (Advanced) Read about reversible debugging and get a simple example working using `rr` or `RevPDB`.
 
 Answer: TODO!
+
+### 5. Here are some sorting algorithm implementations. Use `cProfile` and `line_profiler` to compare the runtime of insertion sort and quicksort. What is the bottleneck of each algorithm? Use then `memory_profiler` to check the memory consumption, why is insertion sort better? Check now the inplace version of quicksort. Challenge: Use `perf` to look at the cycle counts and cache hits and misses of each algorithm.
+
+Answer:
+
+```bash
+python3 -m cProfile -s tottime sorts.py 1000 | grep -E "quick|insertion|tottime"
+```
+
+outputs
+
+```
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+33690/1000    0.063    0.000    0.093    0.000 sorts.py:23(quicksort)
+34148/1000    0.051    0.000    0.062    0.000 sorts.py:32(quicksort_inplace)
+     1000    0.019    0.000    0.019    0.000 sorts.py:11(insertionsort)
+```
+
+To use `line_profiler`, add `@profile` before the definition of the methods. In Ubuntu, install the profiler with `sudo apt install python3-line-profiler`. The output of `kernprof -vl sorts.py` is:
+
+```
+Wrote profile results to sorts.py.lprof
+Timer unit: 1e-06 s
+
+Total time: 0.316998 s
+File: sorts.py
+Function: insertionsort at line 10
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    10                                           @profile
+    11                                           def insertionsort(array):
+    12                                           
+    13     26130      10633.0      0.4      3.4      for i in range(len(array)):
+    14     25130      10174.0      0.4      3.2          j = i-1
+    15     25130      11081.0      0.4      3.5          v = array[i]
+    16    225906     101890.0      0.5     32.1          while j >= 0 and v < array[j]:
+    17    200776      88277.0      0.4     27.8              array[j+1] = array[j]
+    18    200776      83388.0      0.4     26.3              j -= 1
+    19     25130      11136.0      0.4      3.5          array[j+1] = v
+    20      1000        419.0      0.4      0.1      return array
+
+Total time: 0.101665 s
+File: sorts.py
+Function: quicksort at line 22
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    22                                           @profile
+    23                                           def quicksort(array):
+    24     33486      18985.0      0.6     18.7      if len(array) <= 1:
+    25     17243       8590.0      0.5      8.4          return array
+    26     16243       8579.0      0.5      8.4      pivot = array[0]
+    27     16243      24446.0      1.5     24.0      left = [i for i in array[1:] if i < pivot]
+    28     16243      24961.0      1.5     24.6      right = [i for i in array[1:] if i >= pivot]
+    29     16243      16104.0      1.0     15.8      return quicksort(left) + [pivot] + quicksort(right)
+
+Total time: 0.274894 s
+File: sorts.py
+Function: quicksort_inplace at line 31
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    31                                           @profile
+    32                                           def quicksort_inplace(array, low=0, high=None):
+    33     33700      16371.0      0.5      6.0      if len(array) <= 1:
+    34        39         18.0      0.5      0.0          return array
+    35     33661      14781.0      0.4      5.4      if high is None:
+    36       961        450.0      0.5      0.2          high = len(array)-1
+    37     33661      14868.0      0.4      5.4      if low >= high:
+    38     17311       6960.0      0.4      2.5          return array
+    39                                           
+    40     16350       7199.0      0.4      2.6      pivot = array[high]
+    41     16350       7370.0      0.5      2.7      j = low-1
+    42    124357      56760.0      0.5     20.6      for i in range(low, high):
+    43    108007      49803.0      0.5     18.1          if array[i] <= pivot:
+    44     56455      24903.0      0.4      9.1              j += 1
+    45     56455      28694.0      0.5     10.4              array[i], array[j] = array[j], array[i]
+    46     16350       9408.0      0.6      3.4      array[high], array[j+1] = array[j+1], array[high]
+    47     16350      14954.0      0.9      5.4      quicksort_inplace(array, low, j)
+    48     16350      14788.0      0.9      5.4      quicksort_inplace(array, j+2, high)
+    49     16350       7567.0      0.5      2.8      return array
+```
+
+With this, we can see that the bottlenecks are the rows with more time percentage (usually the loops and array accessing lines).
+
+Installing the memory_profiler with `sudo apt-get install python3-memory-profiler`. Something went wrong with the operation of the profiler using the command ``python3 -m memory_profiler sorts.py`.
