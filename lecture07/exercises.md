@@ -129,3 +129,41 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 With this, we can see that the bottlenecks are the rows with more time percentage (usually the loops and array accessing lines).
 
 Installing the memory_profiler with `sudo apt-get install python3-memory-profiler`. Something went wrong with the operation of the profiler using the command ``python3 -m memory_profiler sorts.py`.
+
+
+### 6. Here’s some (arguably convoluted) Python code for computing Fibonacci numbers using a function for each number.
+
+```python
+#!/usr/bin/env python
+def fib0(): return 0
+
+def fib1(): return 1
+
+s = """def fib{}(): return fib{}() + fib{}()"""
+
+if __name__ == '__main__':
+
+    for n in range(2, 10):
+        exec(s.format(n, n-1, n-2))
+    # from functools import lru_cache
+    # for n in range(10):
+    #     exec("fib{} = lru_cache(1)(fib{})".format(n, n))
+    print(eval("fib9()"))
+```
+
+Put the code into a file and make it executable. Install prerequisites: `pycallgraph` and `graphviz`. (If you can run `dot`, you already have GraphViz.) Run the code as is with `pycallgraph graphviz -- ./fib.py` and check the `pycallgraph.png` file. How many times is `fib0` called?. We can do better than that by memoizing the functions. Uncomment the commented lines and regenerate the images. How many times are we calling each `fibN` function now?
+
+Answer:
+
+```bash
+pycallgraph graphviz -- ./fib.py
+```
+
+![pycallgraph](https://user-images.githubusercontent.com/69206952/206306078-dc0aabe3-6a8d-4023-b7cf-d5590f5975da.png)
+
+`fib0` is called 21 times.
+
+After uncommenting the lines:
+
+
+![pycallgraph](https://user-images.githubusercontent.com/69206952/206306547-21d2f099-ef5b-44db-b790-054a91285693.png)
