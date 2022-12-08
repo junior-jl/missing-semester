@@ -128,7 +128,7 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 
 With this, we can see that the bottlenecks are the rows with more time percentage (usually the loops and array accessing lines).
 
-Installing the memory_profiler with `sudo apt-get install python3-memory-profiler`. Something went wrong with the operation of the profiler using the command ``python3 -m memory_profiler sorts.py`.
+Installing the memory_profiler with `sudo apt-get install python3-memory-profiler`. Something went wrong with the operation of the profiler using the command `python3 -m memory_profiler sorts.py`.
 
 
 ### 6. Here’s some (arguably convoluted) Python code for computing Fibonacci numbers using a function for each number.
