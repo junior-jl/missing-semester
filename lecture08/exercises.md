@@ -52,7 +52,7 @@ plt.savefig(args.o)
 \end{document}
 ```
 
-After running `make`, the command `ls | grep paper` returns the following:
+Given the necessary permissions to `plot.py` to be executed, before running make, execute `git add -A` to track the current files. After running `make`, the command `ls | grep paper` returns the following:
 
 ```
 paper.aux
@@ -60,3 +60,18 @@ paper.log
 paper.pdf
 paper.tex
 ```
+
+Adding the following lines to `Makefile`:
+
+```Makefile
+.PHONY: clean
+clean:
+	git ls-files -o | xargs rm -f
+```
+
+Because `clean` is declared a phony target, everytime `make clean` is executed, `git ls-files -o | xargs rm -f` will be executed. `git ls-files -o` outputs all filenames that are untracked by git. So after running `make clean`, every file that can be recreated by `make` is removed. Now running `ls | grep paper | clip.exe`, the output is only
+
+```
+paper.tex
+```
+
