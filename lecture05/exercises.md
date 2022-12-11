@@ -74,3 +74,46 @@ Now, after `source pidwait.sh`:
 sleep 15 &
 pidwait $!
 ```
+
+## Terminal multiplexer
+
+### 1. Follow this tmux [tutorial](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/) and then learn how to do some basic customizations following these steps.
+
+Answer: -
+
+## Aliases
+
+### 1. Create an alias `dc` that resolves to `cd` for when you type it wrongly.
+
+Answer:
+
+```bash
+alias dc=cd
+```
+
+### 2. Run `history | awk '{$1="";print substr($0,2)}' | sort | uniq -c | sort -n | tail -n 10` to get your top 10 most used commands and consider writing shorter aliases for them. Note: this works for Bash; if you’re using ZSH, use `history 1` instead of just `history`.
+
+Answer:
+
+Output of `history | awk '{$1="";print substr($0,2)}' | sort | uniq -c | sort -n | tail -n 10`:
+
+```
+     14 git stash
+     14 jobs -l
+     15 echo $z
+     18 sh test1.sh
+     24 vim example.sh
+     25 shellcheck example.sh
+     27 cat network_parameters.md
+     32 vim q3.sh
+     35 sh q3.sh
+     50 ls
+```
+
+Aliases:
+
+```bash
+	alias l=ls
+	alias ç=echo
+	alias sch=shellcheck
+```
